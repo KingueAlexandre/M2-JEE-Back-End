@@ -14,19 +14,20 @@ import java.util.Arrays;
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+
     }
-//        WebClient webClient = WebClient.create();
-//        Student student = webClient.get()
-//                .uri("http://localhost:8080/students/1")
-//                .retrieve()
-//                .bodyToMono(Student.class)
-//                .block();
+
 //    }
     @Bean
     public CommandLineRunner printAllBeans(ApplicationContext applicationContext) {
         return args -> {
-            Arrays.stream(applicationContext.getBeanDefinitionNames())
-                    .forEach(System.out::println);
+            WebClient webClient = WebClient.create();
+            Student student = webClient.get()
+                .uri("http://localhost:8080/students/1")
+                .retrieve()
+                .bodyToMono(Student.class)
+                .block();
+            System.out.println(student);
         };
     }
 }

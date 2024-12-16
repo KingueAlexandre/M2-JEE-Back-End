@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,4 +25,12 @@ public class StudentRestController {
             return student;
         }
     }
+
+    // Route qui renvoie la liste de tous les étudiants
+    @GetMapping("/students")
+    public List<Student> getAllStudents() {
+        return students.values().stream().toList();
+    }
+
+
 }

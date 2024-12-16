@@ -11,5 +11,8 @@ public record Student(
     @JsonProperty("last_name")
     String lastName
     ){
-
+    @Override
+    public String toString() {
+        return "Student{id=" + uid + ", firstName='" + firstName + "', lastName=" + lastName + '}';
+    }
 }
