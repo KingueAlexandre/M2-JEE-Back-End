@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record Pokemon(
-        @JsonIgnore
         String name,
         @JsonProperty("url")
         String url
@@ -13,7 +12,12 @@ public record Pokemon(
 
     @Override
     public String toString() {
-        return "Student{name=" + name + ", url='" + url + "}";
+        return "Pokemon{name=" + name + ", url='" + url + "}";
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
 

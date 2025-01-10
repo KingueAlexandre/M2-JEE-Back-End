@@ -18,6 +18,7 @@ public class StudentRestController {
     @GetMapping("/students/{id}")
     public Student getStudent(@PathVariable("id") long id) {
         var student = students.get(id);
+        System.out.println("Student: " + id);
         if (student==null){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "No student with id ("+id+")");
@@ -29,8 +30,9 @@ public class StudentRestController {
     // Route qui renvoie la liste de tous les étudiants
     @GetMapping("/students")
     public List<Student> getAllStudents() {
+        System.out.println("Student: All");
+
         return students.values().stream().toList();
     }
-
 
 }
