@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record Pokemon(
-        String name,
-        @JsonProperty("url")
-        String url
-){
+    @JsonProperty("name")
+    String name,
+    @JsonProperty("url")
+    String url){
+
 
     @Override
     public String toString() {

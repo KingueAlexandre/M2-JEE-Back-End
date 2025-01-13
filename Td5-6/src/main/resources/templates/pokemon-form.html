@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tr="http://www.w3.org/1999/html">
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -39,7 +39,24 @@
 <!--    <p th:each="err : ${#fields.errors()}">Erreur : <span th:text="${err}"></span></p>-->
 <!--</div>-->
 <div th:if="${pokemon!=null}">
-    <p>Your pokemon is <strong th:text="${pokemon}"></strong> </p>
+    <p>Your pokemon is <strong th:text="${pokemon.name()}"></strong> </p>
+
+    <div th:if="${pokemonSprite!=null}">
+        <p>   FROM API   </p>
+        <img th:src="${pokemonSprite.front_default()}"  alt="Erreur from API...">
+    </div>
+    <div th:if="${pokemonSpriteCached!=null}">
+        <p>   FROM CACHE       </p>
+    </div>        <img th:src="'data:image/png;base64,' + ${pokemonSpriteCached}" alt="Downloading...">
+
+</div>
+<div th:if="${topFetish!=null}">
+    <p> <b> Top Pokemon: </b></p>
+    <tr th:each="pokemon: ${topFetish}">
+        <p>
+        <td th:text="${pokemon.name}" />
+        </p>
+    </tr>
 </div>
 </body>
 </html>
