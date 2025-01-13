@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body><hmtl>
+<form action="rectangle" method="post">
+<h2>Rectangle area calculator</h2>
+    <div><label for="h">Height:</label>
+        <input id="h" type="text" name="height"></div>
+        <p th:if="${#fields.hasErrors('height')}">Invalid height</p>
+
+    <div><label for="w">Width:</label>
+        <input type="text" id="w" name="width"></div>
+        <p th:if="${#fields.hasErrors('width')}">Invalid width</p>
+
+
+    <div><button type="submit">Compute</button></div>
+</form>
+</hmtl></body></html>
