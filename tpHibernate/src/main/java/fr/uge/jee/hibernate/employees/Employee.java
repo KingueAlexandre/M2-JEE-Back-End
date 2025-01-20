@@ -2,7 +2,6 @@ package fr.uge.jee.hibernate.employees;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
 
 @Entity
 @Table(name = "Employee")
@@ -22,7 +21,6 @@ public class Employee {
         this.lastName = lastName;
         this.salary = salary;
     }
-    public Employee(){}
 
     public long getId() {
         return id;
@@ -54,6 +52,9 @@ public class Employee {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    public Employee() {
     }
 
     @Override
