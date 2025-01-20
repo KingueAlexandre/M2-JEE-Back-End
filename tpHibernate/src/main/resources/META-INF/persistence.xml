@@ -10,6 +10,7 @@
         <properties>
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:h2:tcp://localhost/~/h2DB"/>
+<!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:p6spy:h2:tcp://localhost/~/h2DB" />-->
 
             <!-- Credentials -->
             <property name="jakarta.persistence.jdbc.user"
@@ -21,10 +22,14 @@
             <property name="jakarta.persistence.schema-generation.database.action"
                       value="drop-and-create"/>
 
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver" />
+
             <!-- SQL statement logging -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.highlight_sql" value="true"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
 
         </properties>
 

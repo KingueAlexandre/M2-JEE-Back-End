@@ -3,6 +3,8 @@ package fr.uge.jee;
 import fr.uge.jee.hibernate.employees.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import fr.uge.jee.hibernate.persistence.*;
+
 
 public class Application {
     public static void main(String[] args) {

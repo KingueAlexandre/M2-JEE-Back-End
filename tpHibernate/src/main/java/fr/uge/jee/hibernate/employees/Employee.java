@@ -1,14 +1,15 @@
 package fr.uge.jee.hibernate.employees;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "Employee")
 public class Employee {
     @Id
     @GeneratedValue
+    @Column(name="EMPLOYEEID")
     private long id;
     @Column(name = "FIRSTNAME")
     private String firstName;
@@ -17,8 +18,8 @@ public class Employee {
     @Column(name = "SALARY")
     private int salary;
     public Employee(String firstName, String lastName, int salary){
-        this.firstName = Objects.requireNonNull(firstName);
-        this.lastName = Objects.requireNonNull(lastName);
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.salary = salary;
     }
     public Employee(){}
@@ -53,5 +54,10 @@ public class Employee {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "["+id+"] "+firstName+" "+ lastName+": "+ salary;
     }
 }
