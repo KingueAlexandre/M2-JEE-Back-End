@@ -7,11 +7,11 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class EmployeeRepository {
 
     private final EntityManagerFactory entityManagerFactory = PersistenceUtils.getEntityManagerFactory();
-    private final Map<Long,Employee> mapEmployees = new HashMap<>();
 
 
     /**
@@ -23,21 +23,26 @@ public class EmployeeRepository {
      */
 
     public long create(String firstName, String lastName, int salary) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        var tx = em.getTransaction();
-        try{
-            tx.begin();
-            var employee = new Employee(firstName,lastName,salary);
-            mapEmployees.put(employee.getId(),employee);
-            em.persist(employee);
-            tx.commit();
+//        EntityManager em = entityManagerFactory.createEntityManager();
+//        var tx = em.getTransaction();
+//        try{
+//            tx.begin();
+//            var employee = new Employee(firstName,lastName,salary);
+//            em.persist(employee);
+//            tx.commit();
+//            return employee.getId();
+//        } catch (Exception e){
+//            tx.rollback();
+//            throw e;
+//        } finally {
+//            em.close();
+//        }
+        Function<EntityManager, Long> function = entityManager -> {
+            var employee = new Employee(firstName, lastName, salary);
+            entityManager.persist(employee);
             return employee.getId();
-        } catch (Exception e){
-            tx.rollback();
-            throw e;
-        } finally {
-            em.close();
-        }
+        };
+        return PersistenceUtils.inTransaction(function);
     }
 
     /**
@@ -47,19 +52,27 @@ public class EmployeeRepository {
      */
 
     public boolean delete(long id) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        var tx = em.getTransaction();
-        try{
-            tx.begin();
-            em.remove(mapEmployees.get(id));
-            tx.commit();
-            return true;
-        } catch (Exception e){
-            tx.rollback();
-            return false;
-        } finally {
-            em.close();
-        }
+//        EntityManager em = entityManagerFactory.createEntityManager();
+//        var tx = em.getTransaction();
+//        try{
+//            tx.begin();
+//            var employee = em.find(Employee.class,id);
+//            em.remove(employee);
+//            tx.commit();
+//            return true;
+//        } catch (Exception e){
+//            tx.rollback();
+//            return false;
+//        } finally {
+//            em.close();
+//        }
+        Function<EntityManager, Boolean> function = entityManager -> {
+            var employee = entityManager.find(Employee.class,id);
+            entityManager.remove(employee);
+            var employeeTest = entityManager.find(Employee.class,id);
+            return employeeTest == null;
+        };
+        return PersistenceUtils.inTransaction(function);
     }
 
     /**
@@ -70,22 +83,28 @@ public class EmployeeRepository {
      */
 
     public boolean update(long id, int salary) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        var tx = em.getTransaction();
-        try{
-            tx.begin();
-            var newEmployee = em.merge(mapEmployees.get(id));
-            tx.commit();
-            if(newEmployee!=null){
-                return true;
-            }
-            return false;
-        } catch (Exception e){
-            tx.rollback();
-            return false;
-        } finally {
-            em.close();
-        }
+//        EntityManager em = entityManagerFactory.createEntityManager();
+//        var tx = em.getTransaction();
+//        try{
+//            tx.begin();
+//            var employee = em.find(Employee.class,id);
+//            employee.setSalary(salary);
+//            var newEmployee = em.merge(employee);
+//            tx.commit();
+//            return newEmployee != null;
+//        } catch (Exception e){
+//            tx.rollback();
+//            return false;
+//        } finally {
+//            em.close();
+//        }
+        Function<EntityManager, Boolean> function = em -> {
+            var employee = em.find(Employee.class, id);
+            employee.setSalary(salary);
+            var newEmployee = em.merge(employee);
+            return newEmployee != null;
+        };
+        return PersistenceUtils.inTransaction(function);
     }
 
     /**
@@ -95,24 +114,33 @@ public class EmployeeRepository {
      */
 
     public Optional<Employee> get(long id) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        var tx = em.getTransaction();
-        try{
-            tx.begin();
-            var employee = em.find(Employee.class,id);
-            if (employee!=null){
+//        EntityManager em = entityManagerFactory.createEntityManager();
+//        var tx = em.getTransaction();
+//        try{
+//            tx.begin();
+//            var employee = em.find(Employee.class,id);
+//            if (employee!=null){
+//                System.out.println(employee); // print student with id 1
+//            }else {
+//                return Optional.empty();
+//            }
+//            tx.commit();
+//            return Optional.of(employee);
+//        } catch (Exception e){
+//            tx.rollback();
+//            throw e;
+//        } finally {
+//            em.close();
+//        }
+        Function<EntityManager, Optional<Employee>> fun = (em) -> {
+            var employee = em.find(Employee.class, id);
+            if (employee != null) {
                 System.out.println(employee); // print student with id 1
-            }else {
-                return Optional.empty();
+                return Optional.of(employee);
             }
-            tx.commit();
-            return Optional.of(employee);
-        } catch (Exception e){
-            tx.rollback();
-            throw e;
-        } finally {
-            em.close();
-        }
+            return Optional.empty();
+        };
+        return PersistenceUtils.inTransaction(fun);
     }
 
     /**
@@ -122,8 +150,15 @@ public class EmployeeRepository {
     public List<Employee> getAll() {
 //        return mapEmployees.values().stream().toList();
         var em = entityManagerFactory.createEntityManager();
-        var q = "SELECT s FROM Employee ";
+        var q = "SELECT e FROM Employee e";
         TypedQuery<Employee> query = em.createQuery(q,Employee.class);
+        return query.getResultList();
+    }
+
+    public List<Employee> getAllByFirstName(String firstName){
+        var em = entityManagerFactory.createEntityManager();
+        var q = "SELECT e FROM Employee e where e.firstName = :firstName";
+        TypedQuery<Employee> query = em.createQuery(q,Employee.class).setParameter("firstName", firstName);
         return query.getResultList();
     }
 

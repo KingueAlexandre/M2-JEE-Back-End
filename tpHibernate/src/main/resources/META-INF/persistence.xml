@@ -12,6 +12,7 @@
                       value="jdbc:h2:tcp://localhost/~/h2DB"/>
 <!--            <property name="jakarta.persistence.jdbc.url" value="jdbc:p6spy:h2:tcp://localhost/~/h2DB" />-->
 
+
             <!-- Credentials -->
             <property name="jakarta.persistence.jdbc.user"
                       value="sa"/>

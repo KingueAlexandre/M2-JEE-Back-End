@@ -2,6 +2,7 @@ package fr.uge.jee;
 
 import fr.uge.jee.hibernate.employees.Employee;
 import fr.uge.jee.hibernate.employees.EmployeeRepository;
+import fr.uge.jee.hibernate.students.StudentRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import fr.uge.jee.hibernate.persistence.*;
@@ -17,8 +18,24 @@ public class Application {
         var homer = repo.create("Homer","Simpson",450);
 
         repo.delete(lisa);
-        repo.update(homer,repo.get(homer).get().getSalary()+100);
+        var homerOp = repo.get(homer);
+        if(homerOp.isPresent()) {
+            repo.update(homer,homerOp.get().getSalary()+100);
+        }
         System.out.println(repo.getAll());
+        System.out.println(repo.getAllByFirstName("Bob"));
+
+
+        StudentRepository studentRepo = new StudentRepository();
+        var alex = studentRepo.create("Alexandre", "Kingué");
+        var yass = studentRepo.create("Yassine", "Ben");
+
+        var uge = studentRepo.createUniversity("Uge");
+        var dp = studentRepo.createLecture("Design Patern");
+
+        studentRepo.updateAddressOfStudent(alex,"9 rue des fermes", "Magny-le-Hongr","France");
+        studentRepo.updateUniversityOfStudent(alex, uge);
+
 
     }
 }
